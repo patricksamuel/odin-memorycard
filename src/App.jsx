@@ -1,9 +1,13 @@
+
+import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import DisplayCard from './components/displayCard'
 import DisplayScore from './components/displayScore'
+
+
 
 function App() {
     const [score, setScore] = useState(0)
@@ -15,9 +19,14 @@ function App() {
     }
 
     const initialCard = [
-      {alreadyClicked : false,searchTerm : "dog"},
-      {alreadyClicked : false,searchTerm : "cat"},
-      {alreadyClicked : false,searchTerm : "camel"}
+      { alreadyClicked: false, searchTerm: "dog" },
+      { alreadyClicked: false, searchTerm: "cat" },
+      { alreadyClicked: false, searchTerm: "camel" },
+      { alreadyClicked: false, searchTerm: "robot" },
+      { alreadyClicked: false, searchTerm: "car" },
+      { alreadyClicked: false, searchTerm: "pizza" },
+      { alreadyClicked: false, searchTerm: "tree" },
+      { alreadyClicked: false, searchTerm: "beach" },
     ]
 
     const [cardList, setCardList] = useState(initialCard)
