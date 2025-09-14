@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -14,15 +14,40 @@ function App() {
       setScore(prev => 0)
     }
 
-  const initialCard = [
-    {alreadyClicked : false},
-    {alreadyClicked : false},
-    {alreadyClicked : false}
-  ]
-  const [cardList, setCardList] = useState(initialCard)
+    const initialCard = [
+      {alreadyClicked : false,searchTerm : "dog"},
+      {alreadyClicked : false,searchTerm : "cat"},
+      {alreadyClicked : false,searchTerm : "camel"}
+    ]
+
+    const [cardList, setCardList] = useState(initialCard)
+
+    useEffect(
+      ()=>{
+      async function fetchCards(){
+          try {
+            const updatedCards = await Promise.all(
+              cardList.map(async card =>{
+                const response = await fetch(`https://api.giphy.com/v1/gifs/translate?api_key=lFYBk5P3EiVHuqWQdGsFKb504e7WUU11&s=${encodeURIComponent(card.searchTerm)}&weirdness=4`)
+                const data= await response.json()
+                return {...card,imageUrl: data.data.images.fixed_width.url }
+              })
+            )
+            setCardList(updatedCards)
+          }
+          catch(err){
+            console.log("error fetching image")
+          }
+
+      }
+      fetchCards()
+    },[])
+
+
+
 
   function resetCard(){
-    setCardList(prev => initialCard)
+    setCardList(prev => prev.map(element => ({...element, alreadyClicked : false})))
   }
 
   function punchCard(n){
@@ -51,13 +76,14 @@ function App() {
   return (
     <>
       <h1>Memory Game</h1>
+      <DisplayScore
+        score={score}
+      />
       <DisplayCard
         cardList = {cardList}
         punchCard = {punchCard}
       />
-      <DisplayScore
-        score={score}
-      />
+
 
     </>
   )
